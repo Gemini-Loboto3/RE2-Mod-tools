@@ -160,6 +160,36 @@ void DecompileADT(LPCSTR in_file, LPCTSTR out_prefix)
 	MemStreamClose(&in);
 }
 
+void DecompileItemITP(LPCSTR filename, LPCSTR folder)
+{
+	MEM_STREAM str;
+	MemStreamOpen(&str, filename);
+
+	u32 *ptr = (u32*)str.data;
+	size_t count = ptr[0] / 4;
+
+	char out_name[MAX_PATH + 1];
+
+	for (size_t i = 0; i < count; i++)
+	{
+		u8 *out;
+		int size;
+		MemStreamSeek(&str, ptr[i], SEEK_SET);
+		adt_depack(&str, &out, &size);
+
+		Tim tim;
+		tim.LoadTim(out);
+
+		Image img;
+		img.CreateFromTim(&tim, 0);
+
+		sprintf_s(out_name, sizeof(out_name), "%s\\item_%03d.png", folder, i);
+		img.SavePng(out_name);
+
+		delete[] out;
+	}
+}
+
 void ListFiles(LPCSTR folder, LPCTSTR filter, std::vector<std::string> &names)
 {
 	HANDLE hFind = INVALID_HANDLE_VALUE;
@@ -247,6 +277,8 @@ void DecompressFile(LPCSTR filename, LPCSTR outfolder)
 
 int main()
 {
+	DecompileItemITP("D:\\Program Files\\BIOHAZARD 2 PC\\mod_mn1_de\\common\\bin\\ITEMDATA.BIN", "item");
+
 	DecompressFile("D:\\Program Files\\BIOHAZARD 2 PC\\mod_mn1_de\\common\\file\\FILE03U.BIN", "D:\\Program Files\\BIOHAZARD 2 PC\\mod_mn1_de\\common\\file\\FILE03U");
 	DecompressFile("D:\\Program Files\\BIOHAZARD 2 PC\\mod_mn1_de\\common\\file\\FILE04U.BIN", "D:\\Program Files\\BIOHAZARD 2 PC\\mod_mn1_de\\common\\file\\FILE04U");
 	DecompressFile("D:\\Program Files\\BIOHAZARD 2 PC\\mod_mn1_de\\common\\file\\FILE09U.BIN", "D:\\Program Files\\BIOHAZARD 2 PC\\mod_mn1_de\\common\\file\\FILE09U");
