@@ -456,6 +456,9 @@ void adt_surface(u16 *source, Image &dest/*, int reorganize*/)
 	//else dest.CreateFromSpec((u8*)source,NULL,Image::IMG_DIRECT15,320,240);
 }
 
+#define MASK_SIZE	0x28000
+//#define MASK_SIZE	0x38300
+
 void extract_roomcut(LPCSTR filename, LPCSTR folder)
 {
 	int count;
@@ -507,7 +510,7 @@ void extract_roomcut(LPCSTR filename, LPCSTR folder)
 		printf("Extracting %s (%d / %d)\n", str, i + 1, count);
 		img.SavePng(str);
 
-		if (dest_size > 0x38300/*0x28000*/)
+		if (dest_size > MASK_SIZE)
 		{
 			Tim tim;
 			tim.LoadTim(&dest[0x28000]);

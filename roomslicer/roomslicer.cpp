@@ -277,13 +277,16 @@ void DecompressFile(LPCSTR filename, LPCSTR outfolder)
 
 int main()
 {
-	DecompileItemITP("D:\\Program Files\\BIOHAZARD 2 PC\\mod_mn1_de\\common\\bin\\ITEMDATA.BIN", "item");
+	//extract_roomcut("D:\\Program Files\\BIOHAZARD 2 PC\\mod_destiny\\COMMON\\bin\\roomcut.bin", "ROOM_destiny");
+	//dump_new("ROOM", "ROOM_destiny", "destiny");
 
-	DecompressFile("D:\\Program Files\\BIOHAZARD 2 PC\\mod_mn1_de\\common\\file\\FILE03U.BIN", "D:\\Program Files\\BIOHAZARD 2 PC\\mod_mn1_de\\common\\file\\FILE03U");
-	DecompressFile("D:\\Program Files\\BIOHAZARD 2 PC\\mod_mn1_de\\common\\file\\FILE04U.BIN", "D:\\Program Files\\BIOHAZARD 2 PC\\mod_mn1_de\\common\\file\\FILE04U");
-	DecompressFile("D:\\Program Files\\BIOHAZARD 2 PC\\mod_mn1_de\\common\\file\\FILE09U.BIN", "D:\\Program Files\\BIOHAZARD 2 PC\\mod_mn1_de\\common\\file\\FILE09U");
-	DecompressFile("D:\\Program Files\\BIOHAZARD 2 PC\\mod_mn1_de\\common\\file\\FILE15U.BIN", "D:\\Program Files\\BIOHAZARD 2 PC\\mod_mn1_de\\common\\file\\FILE15U");
-	DecompressFile("D:\\Program Files\\BIOHAZARD 2 PC\\mod_mn1_de\\common\\file\\FILE18U.BIN", "D:\\Program Files\\BIOHAZARD 2 PC\\mod_mn1_de\\common\\file\\FILE18U");
+	//DecompileItemITP("D:\\Program Files\\BIOHAZARD 2 PC\\mod_mn1_de\\common\\bin\\ITEMDATA.BIN", "item");
+
+	//DecompressFile("D:\\Program Files\\BIOHAZARD 2 PC\\mod_mn1_de\\common\\file\\FILE03U.BIN", "D:\\Program Files\\BIOHAZARD 2 PC\\mod_mn1_de\\common\\file\\FILE03U");
+	//DecompressFile("D:\\Program Files\\BIOHAZARD 2 PC\\mod_mn1_de\\common\\file\\FILE04U.BIN", "D:\\Program Files\\BIOHAZARD 2 PC\\mod_mn1_de\\common\\file\\FILE04U");
+	//DecompressFile("D:\\Program Files\\BIOHAZARD 2 PC\\mod_mn1_de\\common\\file\\FILE09U.BIN", "D:\\Program Files\\BIOHAZARD 2 PC\\mod_mn1_de\\common\\file\\FILE09U");
+	//DecompressFile("D:\\Program Files\\BIOHAZARD 2 PC\\mod_mn1_de\\common\\file\\FILE15U.BIN", "D:\\Program Files\\BIOHAZARD 2 PC\\mod_mn1_de\\common\\file\\FILE15U");
+	//DecompressFile("D:\\Program Files\\BIOHAZARD 2 PC\\mod_mn1_de\\common\\file\\FILE18U.BIN", "D:\\Program Files\\BIOHAZARD 2 PC\\mod_mn1_de\\common\\file\\FILE18U");
 	//FixRdtText("D:\\Program Files\\BIOHAZARD 2 PC\\mod_mn1_de\\pl0\\rdt");
 
 	//DecompileADT("D:\\Program Files\\BIOHAZARD 2 PC\\common\\Data\\end00.adt", "end00");
@@ -292,6 +295,23 @@ int main()
 	//DecompileADT("D:\\Program Files\\BIOHAZARD 2 PC\\common\\Data\\kage.adt", "kage");
 	//DecompileADT("D:\\Program Files\\BIOHAZARD 2 PC\\common\\bin\\pcstaff.adt", "pcstaff");
 	//DecompileADT("D:\\Program Files\\BIOHAZARD 2 PC\\common\\data\\open14.adt", "open14.png");
+
+	//DecompressFile("D:\\Program Files\\BIOHAZARD 2 PC\\mod_destiny\\COMMON\\file\\FILE00U.BIN", "D:\\Program Files\\BIOHAZARD 2 PC\\mod_destiny\\COMMON\\file\\FILE00U");
+	//DecompressFile("D:\\Program Files\\BIOHAZARD 2 PC\\mod_destiny\\COMMON\\file\\FILE01U.BIN", "D:\\Program Files\\BIOHAZARD 2 PC\\mod_destiny\\COMMON\\file\\FILE01U");
+	//DecompressFile("D:\\Program Files\\BIOHAZARD 2 PC\\mod_destiny\\COMMON\\file\\FILE02U.BIN", "D:\\Program Files\\BIOHAZARD 2 PC\\mod_destiny\\COMMON\\file\\FILE02U");
+	//DecompressFile("D:\\Program Files\\BIOHAZARD 2 PC\\mod_destiny\\COMMON\\file\\FILE03U.BIN", "D:\\Program Files\\BIOHAZARD 2 PC\\mod_destiny\\COMMON\\file\\FILE03U");
+	//DecompressFile("D:\\Program Files\\BIOHAZARD 2 PC\\mod_destiny\\COMMON\\file\\FILE05U.BIN", "D:\\Program Files\\BIOHAZARD 2 PC\\mod_destiny\\COMMON\\file\\FILE05U");
+	//DecompressFile("D:\\Program Files\\BIOHAZARD 2 PC\\mod_destiny\\COMMON\\file\\FILE06U.BIN", "D:\\Program Files\\BIOHAZARD 2 PC\\mod_destiny\\COMMON\\file\\FILE06U");
+	//DecompressFile("D:\\Program Files\\BIOHAZARD 2 PC\\mod_destiny\\COMMON\\file\\FILE07U.BIN", "D:\\Program Files\\BIOHAZARD 2 PC\\mod_destiny\\COMMON\\file\\FILE07U");
+	//DecompressFile("D:\\Program Files\\BIOHAZARD 2 PC\\mod_destiny\\COMMON\\file\\FILE0AU.BIN", "D:\\Program Files\\BIOHAZARD 2 PC\\mod_destiny\\COMMON\\file\\FILE0AU");
+	//DecompressFile("D:\\Program Files\\BIOHAZARD 2 PC\\mod_destiny\\COMMON\\file\\FILE0BU.BIN", "D:\\Program Files\\BIOHAZARD 2 PC\\mod_destiny\\COMMON\\file\\FILE0BU");
+	//DecompressFile("D:\\Program Files\\BIOHAZARD 2 PC\\mod_destiny\\COMMON\\file\\FILE12U.BIN", "D:\\Program Files\\BIOHAZARD 2 PC\\mod_destiny\\COMMON\\file\\FILE12U");
+	//DecompressFile("D:\\Program Files\\BIOHAZARD 2 PC\\mod_destiny\\COMMON\\file\\FILE13U.BIN", "D:\\Program Files\\BIOHAZARD 2 PC\\mod_destiny\\COMMON\\file\\FILE13U");
+	//DecompressFile("D:\\Program Files\\BIOHAZARD 2 PC\\mod_destiny\\COMMON\\file\\FILE14U.BIN", "D:\\Program Files\\BIOHAZARD 2 PC\\mod_destiny\\COMMON\\file\\FILE14U");
+	//DecompressFile("D:\\Program Files\\BIOHAZARD 2 PC\\mod_destiny\\COMMON\\file\\FILE15U.BIN", "D:\\Program Files\\BIOHAZARD 2 PC\\mod_destiny\\COMMON\\file\\FILE15U");
+	//DecompressFile("D:\\Program Files\\BIOHAZARD 2 PC\\mod_destiny\\COMMON\\file\\FILE16U.BIN", "D:\\Program Files\\BIOHAZARD 2 PC\\mod_destiny\\COMMON\\file\\FILE16U");
+	//DecompressFile("D:\\Program Files\\BIOHAZARD 2 PC\\mod_destiny\\COMMON\\file\\FILE17U.BIN", "D:\\Program Files\\BIOHAZARD 2 PC\\mod_destiny\\COMMON\\file\\FILE17U");
+	//DecompressFile("D:\\Program Files\\BIOHAZARD 2 PC\\mod_destiny\\COMMON\\file\\FILE18U.BIN", "D:\\Program Files\\BIOHAZARD 2 PC\\mod_destiny\\COMMON\\file\\FILE18U");
 
 #if 1
 	//extract_roomcut("D:\\Program Files\\Merdal Night\\Resident Evil Mortal Night (D.E.) - EP1\\RE Mortal Night (DE) - EP1\\Common\\Bin\\roomcut.bin", "ROOM_merdal");

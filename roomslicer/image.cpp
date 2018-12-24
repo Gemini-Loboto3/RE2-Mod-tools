@@ -135,7 +135,7 @@ void ConvertDirect15(BYTE *src_row, BYTE *dst_row, int w)
 	RGBTRIPLE *p=(RGBTRIPLE*)dst_row;
 	for(int x=0; x<w; x++, src_row+=2)
 	{
-		RGBQUAD q=ClutToRgb(*((u16*)src_row));
+		RGBQUAD q=ClutToRgb(*((u16*)src_row), 0);
 		memcpy(&p[x],&q,sizeof(RGBTRIPLE));
 	}
 }
