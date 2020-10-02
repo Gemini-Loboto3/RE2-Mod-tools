@@ -1,0 +1,42 @@
+<Strings>
+	<!-- options, input screen -->
+	<Text>Change</Text>
+	<Text>Exit</Text>
+	<Text>Leave</Text>
+	<Text>Default</Text>
+	<Text>Map</Text>
+	<Text>Configure</Text>
+	<Text>Status</Text>
+	<Text>Run/Cancel</Text>
+	<Text>Fire/Confirm</Text>
+	<Text>Get Ready</Text>
+	<Text>Turn right</Text>
+	<Text>Turn left</Text>
+	<Text>Backward</Text>
+	<Text>Forward</Text>
+	<!-- options, audio settings -->
+	<Text>MODE</Text>
+	<Text>MONO</Text>
+	<Text>STEREO</Text>
+	<Text>QUALITY</Text>
+	<Text>HIGH</Text>
+	<Text>MEDIUM</Text>
+	<Text>LOW</Text>
+	<Text>BGM VOLUME</Text>
+	<Text>SE. VOLUME</Text>
+	<!-- save, more strings -->
+	<Text>Exit</Text>
+	<Text>Create New</Text>
+	<Text>Proceed to overwrite this save file?</Text>
+	<Text>Overwrite</Text>
+	<Text>Update</Text>
+	<Text>Cancel</Text>
+	<Text>Load</Text>
+	<Text>Leave without saving?</Text>
+	<Text>Yes</Text>
+	<Text>No</Text>
+	<Text>Folder</Text>
+	<Text>Do not load</Text>
+	<Text>Do not save</Text>
+	<Text>Save</Text>
+</Strings>

@@ -18,6 +18,8 @@ public:
 	void Close();
 
 	DWORD GetSize();
+	DWORD GetPosition() { return SetFilePointer(handle, 0, NULL, FILE_CURRENT); }
+	void SetPosition(DWORD pos, DWORD move_method) { SetFilePointer(handle, pos, NULL, move_method); }
 	void GetFinalPath();
 
 	__inline const char* GetOpenPath() { return open_path.c_str(); }

@@ -39,6 +39,21 @@
     <ClInclude Include="FileHandle.h">
       <Filter>Source Files</Filter>
     </ClInclude>
+    <ClInclude Include="Bitmap.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="tinyxml2.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Room.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="3DModel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="crc.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -60,6 +75,30 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="FileHandle.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Bitmap.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="tinyxml2.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Room.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="scd.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="3DModel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="crc.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="debug.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="bilinear.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

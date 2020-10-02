@@ -2,7 +2,6 @@
 // or project specific include files that are used frequently, but
 // are changed infrequently
 //
-
 #pragma once
 
 #include "targetver.h"
@@ -28,4 +27,29 @@ typedef signed char		s8;
 typedef signed short	s16;
 typedef signed int		s32;
 
+#include "FileHandle.h"
+
 #define NAKED	__declspec(naked)
+
+class CBufferFile
+{
+public:
+	CBufferFile() { data = NULL; size = 0; }
+	~CBufferFile() { if (data) delete[] data; }
+
+	bool Open(LPCSTR filename)
+	{
+		CFile f(filename);
+		if (!f.IsOpen())
+			return 0;
+
+		size = f.GetSize();
+
+		data = new u8[size];
+		f.Read(data, size);
+		return 1;
+	}
+
+	u8 *data;
+	size_t size;
+};
