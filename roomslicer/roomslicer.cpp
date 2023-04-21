@@ -702,20 +702,49 @@ void DumpRe3GcBgs()
 	}
 }
 
+void Fix_rdt(const char* name)
+{
+	CBufferFile f;
+	if (!f.Open(name))
+		return;
+
+	RDT_HEADER* h = (RDT_HEADER*)f.data;
+
+	if (h->tex[0])
+		h->tex[1] = h->tex[0];
+
+	FILE* o = fopen(name, "wb");
+	fwrite(f.data, f.size, 1, o);
+	fclose(o);
+}
+
 int main()
 {
-	Set_color_mode(1);
-	DecompileADT("E:\\ISO\\GC\\Resident Evil 3 - Nemesis (USA)\\Bss\\rc1150.adt", "E:\\ISO\\GC\\Resident Evil 3 - Nemesis (USA)\\Png\\rc1150");
-	DecompileADT("E:\\ISO\\GC\\Resident Evil 3 - Nemesis (USA)\\Bss\\rc115c.adt", "E:\\ISO\\GC\\Resident Evil 3 - Nemesis (USA)\\Png\\rc115c");
-	DumpRe3GcBgs();
+	for (int Stage = 1; Stage < 8; Stage++)
+	{
+		for (int Room = 0; Room < 32; Room++)
+		{
+			printf("Fixing %X%02X...\n", Stage, Room);
+			char name[MAX_PATH];
+			sprintf_s(name, MAX_PATH, "ROOM%X%02X0.RDT", Stage, Room);
+			Fix_rdt(name);
+			sprintf_s(name, MAX_PATH, "ROOM%X%02X1.RDT", Stage, Room);
+			Fix_rdt(name);
+		}
+	}
 
-	FixRdtText("D:\\Program Files\\BIOHAZARD 2 PC\\mod_leonc\\pl0\\rdt");
+	//Set_color_mode(1);
+	//DecompileADT("E:\\ISO\\GC\\Resident Evil 3 - Nemesis (USA)\\Bss\\rc1150.adt", "E:\\ISO\\GC\\Resident Evil 3 - Nemesis (USA)\\Png\\rc1150");
+	//DecompileADT("E:\\ISO\\GC\\Resident Evil 3 - Nemesis (USA)\\Bss\\rc115c.adt", "E:\\ISO\\GC\\Resident Evil 3 - Nemesis (USA)\\Png\\rc115c");
+	//DumpRe3GcBgs();
 
-	Dump_debug_names("main.exe", "debug.txt");
+	//FixRdtText("D:\\Program Files\\BIOHAZARD 2 PC\\mod_leonc\\pl0\\rdt");
 
-	Extract_StTim("D:\\Program Files\\BIOHAZARD 2 PC\\common\\data\\st0_jp.tim", "st0_jp");
-	Extract_StTim("D:\\Program Files\\BIOHAZARD 2 PC\\common\\data\\st1_jp.tim", "st1_jp");
-	Extract_StTim("D:\\Program Files\\BIOHAZARD 2 PC\\common\\data\\st2_jp.tim", "st2_jp");
+	//Dump_debug_names("main.exe", "debug.txt");
+
+	//Extract_StTim("D:\\Program Files\\BIOHAZARD 2 PC\\common\\data\\st0_jp.tim", "st0_jp");
+	//Extract_StTim("D:\\Program Files\\BIOHAZARD 2 PC\\common\\data\\st1_jp.tim", "st1_jp");
+	//Extract_StTim("D:\\Program Files\\BIOHAZARD 2 PC\\common\\data\\st2_jp.tim", "st2_jp");
 
 	//DecompileADT("D:\\Program Files\\BIOHAZARD 2 PC\\claire2.5\\COMMON\\DATU\\FONT0P.ADT", "font0p");
 	//DecompileADT("D:\\Program Files\\BIOHAZARD 2 PC\\COMMON\\DATA\\FONT0.ADT", "font0");
@@ -728,11 +757,11 @@ int main()
 	//Extract_StTim("D:\\Program Files\\BIOHAZARD 2 PC\\mod_mn1_de\\common\\data\\st0_jp.tim", "D:\\Program Files\\BIOHAZARD 2 PC\\mod_mn1_de\\common\\data\\st0_jp");
 
 	//ExtractRdtObjects("D:\\Program Files\\BIOHAZARD 2 PC\\mod_mn1_de\\pl0\\rdt", "obj_hunk", true);
-	ExtractRdtObjects("D:\\Program Files\\BIOHAZARD 2 PC\\pl0\\rdt", "obj_leon", true);
-	ExtractRdtObjects("D:\\Program Files\\BIOHAZARD 2 PC\\pl1\\rdt", "obj_claire", false);
+	//ExtractRdtObjects("D:\\Program Files\\BIOHAZARD 2 PC\\pl0\\rdt", "obj_leon", true);
+	//ExtractRdtObjects("D:\\Program Files\\BIOHAZARD 2 PC\\pl1\\rdt", "obj_claire", false);
 
 	//ExtractDamageTables("D:\\Program Files\\BIOHAZARD 2 PC\\bio2 1.10.exe", "xml");
-	ExtractDamageTablesPlatinum("D:\\Program Files\\Merdal Night\\Resident Evil Mortal Night (D.E.) - EP1\\RE Mortal Night (DE) - EP1\\Episode I.exe", "xml_mortal");
+	//ExtractDamageTablesPlatinum("D:\\Program Files\\Merdal Night\\Resident Evil Mortal Night (D.E.) - EP1\\RE Mortal Night (DE) - EP1\\Episode I.exe", "xml_mortal");
 	//ExtractEspdata("D:\\Program Files\\BIOHAZARD 2 PC\\common\\bin\\espdat1.bin", "esp1");
 	//ExtractEspdata("D:\\Program Files\\BIOHAZARD 2 PC\\common\\bin\\espdat2.bin", "esp2");
 
@@ -748,8 +777,8 @@ int main()
 	//DecompressFile("D:\\Program Files\\BIOHAZARD 2 PC\\mod_mn1_de\\common\\file\\FILE18U.BIN", "D:\\Program Files\\BIOHAZARD 2 PC\\mod_mn1_de\\common\\file\\FILE18U");
 	//FixRdtText("D:\\Program Files\\BIOHAZARD 2 PC\\mod_mn1_de\\pl0\\rdt");
 
-	DecompileADT("D:\\Program Files\\BIOHAZARD 2 PC\\common\\Data\\tex216.adt", "tex216");
-	DecompileADT("D:\\Program Files\\BIOHAZARD 2 PC\\common\\Data\\tex316.adt", "tex316");
+	//DecompileADT("D:\\Program Files\\BIOHAZARD 2 PC\\common\\Data\\tex216.adt", "tex216");
+	//DecompileADT("D:\\Program Files\\BIOHAZARD 2 PC\\common\\Data\\tex316.adt", "tex316");
 	//DecompileADT("D:\\Program Files\\BIOHAZARD 2 PC\\common\\Data\\end00.adt", "end00");
 	//DecompileADT("D:\\Program Files\\BIOHAZARD 2 PC\\common\\Data\\EXTITLE1.adt", "end00");
 	//DecompileADT("D:\\Program Files\\BIOHAZARD 2 PC\\common\\Data\\font0.adt", "font0");
@@ -777,7 +806,7 @@ int main()
 #if 1
 	//extract_roomcut("D:\\Program Files\\Merdal Night\\Resident Evil Mortal Night (D.E.) - EP1\\RE Mortal Night (DE) - EP1\\Common\\Bin\\roomcut.bin", "ROOM_merdal");
 #else
-	extract_roomcut("D:\\Program Files\\BIOHAZARD 2 PC\\common\\bin\\roomcut.bin", "ROOM");
+	//extract_roomcut("D:\\Program Files\\BIOHAZARD 2 PC\\common\\bin\\roomcut.bin", "ROOM");
 #endif
 
 	//dump_new("ROOM", "ROOM_merdal", "merda");

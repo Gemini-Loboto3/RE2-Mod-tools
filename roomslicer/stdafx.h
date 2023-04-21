@@ -47,6 +47,7 @@ public:
 
 		data = new u8[size];
 		f.Read(data, size);
+		f.Close();
 		return 1;
 	}
 

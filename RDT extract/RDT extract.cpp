@@ -6,7 +6,7 @@
 #include <Windows.h>
 #include <vector>
 #include <algorithm>
-#include "..\ddraw\tinyxml2.h"
+#include "tinyxml2.h"
 #include "FileHandle.h"
 
 #include <Mmsystem.h>
@@ -44,24 +44,24 @@ typedef struct tagRdtHeader
 	char nDoor;			// unused?
 	char nRoom_at;		// unused?
 	char Reverb_lv;		// unused?
-	u8 nSprite_max;		// 0x08
-	u32 kan0,			// 0x10
-		vh0,			// 0x14
-		vb0;			// 0x18
-	u32 kan1,			// 0x1C
-		vh1,			// 0x20
-		vb1;			// 0x24
-	u32 sca;
-	u32 rid;
-	u32 rvd;
-	u32 lit;
-	u32 obj;
-	u32 flr, blk;
-	u32 tex[2];			// 0x3c, 0x40
-	u32 scd[3];			// 0x44, 0x48, 0x4C
-	u32 esp, eff;
-	u32 etim, mtim;
-	u32 rbj;
+	u8 nSprite_max;		// 
+	u32 pEdt0,			// 08
+		pVh0,			// 0c
+		pVb0;			// 10
+	u32 padd0,			// 14
+		padd1,			// 18
+		pRbj_end;		// 1c
+	u32 pSca;			// 20
+	u32 pRcut;			// 24
+	u32 pVcut;			// 28
+	u32 pLight;			// 2c
+	u32 pOmodel;		// 30
+	u32 pFloor, pBlock;	// 34, 38
+	u32 pMessage[2];	// 3c, 40
+	u32 pScd[3];		// 44, 48, 4c
+	u32 pEsp_hed, pEsp_end;	// 50, 54
+	u32 pEsp_tim, pEsp_tim_end;	// 58, 5c
+	u32 pRbj;			// 60
 } RDT_HEADER;
 
 typedef struct tagPair
@@ -87,8 +87,8 @@ void ExtractSCD0(LPCSTR filename, LPCSTR folder_out)
 	RDT_HEADER *head = (RDT_HEADER*)buffer;
 
 	// hook onto scd data
-	u16 *ptr = (u16*)&buffer[head->scd[1]];
-	u8 *end = &buffer[head->scd[2]];
+	u16 *ptr = (u16*)&buffer[head->pScd[1]];
+	u8 *end = &buffer[head->pScd[2]];
 
 	FILE *o;
 
@@ -143,8 +143,8 @@ void ExtractSCD1(LPCSTR filename, LPCSTR folder_out)
 	RDT_HEADER *head = (RDT_HEADER*)buffer;
 
 	// hook onto scd data
-	u16 *ptr = (u16*)&buffer[head->scd[2]];
-	u8 *end = &buffer[head->tex[0]];
+	u16 *ptr = (u16*)&buffer[head->pScd[2]];
+	u8 *end = &buffer[head->pMessage[0]];
 
 	FILE *o;
 
@@ -833,9 +833,9 @@ void ExtractRoomText(LPCSTR room_name, LPCSTR out_name)
 
 	RDT_HEADER *head = (RDT_HEADER*)buffer;
 
-	if (head->tex[1] != 0)
+	if (head->pMessage[1] != 0)
 	{
-		u8 *text = &buffer[head->tex[1]];
+		u8 *text = &buffer[head->pMessage[1]];
 		u16 *ptr = (u16*)text;
 
 		XMLDocument xml;
@@ -869,9 +869,9 @@ void ExtractRoomTextEU(LPCSTR room_name, LPCSTR out_name)
 
 	RDT_HEADER *head = (RDT_HEADER*)buffer;
 
-	if (head->tex[0] != 0)
+	if (head->pMessage[0] != 0)
 	{
-		u8 *text = &buffer[head->tex[0]];
+		u8 *text = &buffer[head->pMessage[0]];
 		u16 *ptr = (u16*)text;
 
 		XMLDocument xml;
@@ -903,34 +903,127 @@ char ToStage(int Stage)
 	return '0';
 }
 
+enum SEG
+{
+	SEG_EDT0,
+	SEG_VH0,
+	SEG_VB0,
+	SEG_PADD0,
+	SEG_PADD1,
+	SEG_RBJEND,
+	SEG_SCA,
+	SEG_RCUT,
+	SEG_VCUT,
+	SEG_LIGHT,
+	SEG_MODEL,
+	SEG_FLOOR,
+	SEG_BLOCK,
+	SEG_MES0,
+	SEG_MES1,
+	SEG_SCD0,
+	SEG_SCD1,
+	SEG_SCD2,
+	SEG_ESPHEAD,
+	SEG_ESPEND,
+	SEG_ESPTIM,
+	SEG_ESPTIMEND,
+	SEG_RBJ,
+	SEG_END
+};
+
+LPCSTR seg_ext[] =
+{
+	"edt0", "vh0", "vb0", "", "", "rbj_end", "sca", "rcut", "vcut",
+	"lit", "mdl", "flr", "blk", "ms0", "ms1", "sc0", "sc1", "sc2",
+	"esph", "espe", "esptim", "esptime", "rbj"
+};
+
+typedef struct PAIR_SEG
+{
+	DWORD ptr;
+	SEG index;
+} PAIR_SEG;
+
+bool sort_seg(PAIR_SEG& a, PAIR_SEG& b)
+{
+	return a.ptr < b.ptr;
+}
+
+#define memalign(x, y) ((x + (y - 1)) & ~(y - 1))
+
+void RDT_fix(LPCSTR filename)
+{
+	CFile f(filename);
+
+	std::vector<BYTE> data = std::vector<BYTE>(f.GetSize());
+	f.Read(data.data(), f.GetSize());
+
+	RDT_HEADER* h = (RDT_HEADER*)data.data();
+
+	std::vector<BYTE> segment[23];
+	std::vector<PAIR_SEG> ptr = std::vector<PAIR_SEG>(24);
+
+	DWORD* p = (DWORD*)&h->pEdt0;
+	for (int i = 0; i < 23; i++)
+	{
+		ptr[i].ptr = *p++;
+		ptr[i].index = (SEG)i;
+	}
+	ptr[23].ptr = f.GetSize();
+	ptr[23].index = SEG_END;
+
+	std::sort(ptr.begin(), ptr.end(), sort_seg);
+
+	// extract segments
+	for (int i = 0; i < 23; i++)
+	{
+		size_t size = ptr[i + 1].ptr - ptr[i].ptr;
+		if (size == 0) continue;
+		segment[ptr[i].index] = std::vector<BYTE>(memalign(size, 4));
+		memcpy(segment[ptr[i].index].data(), data.data() + ptr[i].ptr, size);
+
+		FILE* fp;
+		char path[32];
+		sprintf_s(path, sizeof(path), "test_rdt\\seg.%s", seg_ext[ptr[i].index]);
+		fopen_s(&fp, path, "wb");
+		if (fp)
+		{
+			fwrite(segment[ptr[i].index].data(), segment[ptr[i].index].size(), 1, fp);
+			fclose(fp);
+		}
+	}
+}
+
 int main()
 {
-	test_mmio();
+	//test_mmio();
 
 	FILE *f;
 	char name[MAX_PATH];
 	char folder[MAX_PATH];
 
-	CreateDirectoryA("RDT", NULL);
-	CreateDirectoryA("exe", NULL);
+	RDT_fix("ROOM1000.RDT");
+
+	//CreateDirectoryA("RDT", NULL);
+	//CreateDirectoryA("exe", NULL);
 
 	//ExtractItemsPlatinumIT("xml_ita\\LeonI.exe", "xml_ita");
 	//ExtractTextGenericEU("xml_ita\\LeonI.exe", "xml_ita\\interact.xml", 0x137F38, 0x137B08, 24);
 	//ExtractTextGenericEU("xml_ita\\LeonI.exe", "xml_ita\\system.xml", 0x139990, 0x137F68, 116);
 	//ExtractTextChoiceEU("xml_ita\\LeonI.exe", "xml_ita\\choice.xml", 0x139AF0, 0x139A78, 0x137200, 7);
 
-	for (int stage = 1; stage <= 7/*0x10*/; stage++)
-	{
-		for (int room = 0; room < 32; room++)
-		{
-			char str0[MAX_PATH], str1[MAX_PATH];
+	//for (int stage = 1; stage <= 7/*0x10*/; stage++)
+	//{
+	//	for (int room = 0; room < 32; room++)
+	//	{
+	//		char str0[MAX_PATH], str1[MAX_PATH];
 
-			sprintf_s(str0, sizeof(str0), "re2ita\\Rdi_c\\ROOM%c%02x1.RDT", ToStage(stage), room);
-			sprintf_s(str1, sizeof(str1), "re2ita\\pl1\\ROOM%c%02x.xml", ToStage(stage), room);
+	//		sprintf_s(str0, sizeof(str0), "re2ita\\Rdi_c\\ROOM%c%02x1.RDT", ToStage(stage), room);
+	//		sprintf_s(str1, sizeof(str1), "re2ita\\pl1\\ROOM%c%02x.xml", ToStage(stage), room);
 
-			ExtractRoomTextEU(str0, str1);
-		}
-	}
+	//		ExtractRoomTextEU(str0, str1);
+	//	}
+	//}
 
 	for (int stage = 1; stage <= 7/*0x10*/; stage++)
 	{
@@ -1008,41 +1101,41 @@ int main()
 	}
 #endif
 
-	//for (int i = 0; i < 1; i++)
-	//{
-	//	for (int Stage = 0xA; Stage <= 0xF; Stage++)
-	//	{
-	//		for (int Room = 0; Room < 256; Room++)
-	//		{
-	//			RDT_HEADER head;
-	//			sprintf(name, "E:\\Storage\\BIOHAZARD 2 PC\\BIOHAZARD 2 PC\\pl%d\\Rdt\\ROOM%X%02X%d.RDT", i, Stage, Room, i);
-	//			f = fopen(name, "rb+");
-	//			// file doesn't exit? skip
-	//			if (!f) continue;
-	//			fread(&head, sizeof(head), 1, f);
-	//			// doesn't have english text, skip
-	//			if (head.tex[1] != 0)
-	//			{
-	//				u8 buffer[2048];
-	//				fseek(f, head.tex[1], SEEK_SET);
-	//				fread(buffer, sizeof(buffer), 1, f);
+	for (int i = 0; i < 1; i++)
+	{
+		for (int Stage = 0xA; Stage <= 0xF; Stage++)
+		{
+			for (int Room = 0; Room < 256; Room++)
+			{
+				RDT_HEADER head;
+				sprintf(name, "E:\\Storage\\BIOHAZARD 2 PC\\BIOHAZARD 2 PC\\pl%d\\Rdt\\ROOM%X%02X%d.RDT", i, Stage, Room, i);
+				f = fopen(name, "rb+");
+				// file doesn't exit? skip
+				if (!f) continue;
+				fread(&head, sizeof(head), 1, f);
+				// doesn't have english text, skip
+				if (head.pMessage[1] != 0)
+				{
+					u8 buffer[2048];
+					fseek(f, head.pMessage[1], SEEK_SET);
+					fread(buffer, sizeof(buffer), 1, f);
 
-	//				u16 *ptr = (u16*)buffer;
-	//				int count = ptr[0] / 2;
-	//				u8 *p = &buffer[ptr[count - 1]];
-	//				while (*p++ != 0xfe);
-	//				if (*p == 0) p++;
+					u16 *ptr = (u16*)buffer;
+					int count = ptr[0] / 2;
+					u8 *p = &buffer[ptr[count - 1]];
+					while (*p++ != 0xfe);
+					if (*p == 0) p++;
 
-	//				sprintf(name, "RDT\\ROOM%X%02X%d.tex", Stage, Room, i);
-	//				FILE *o = fopen(name, "wb+");
-	//				fwrite(buffer, p - buffer, 1, o);
-	//				fclose(o);
-	//			}
+					sprintf(name, "RDT\\ROOM%X%02X%d.tex", Stage, Room, i);
+					FILE *o = fopen(name, "wb+");
+					fwrite(buffer, p - buffer, 1, o);
+					fclose(o);
+				}
 
-	//			fclose(f);
-	//		}
-	//	}
-	//}
+				fclose(f);
+			}
+		}
+	}
 
     return 0;
 }
